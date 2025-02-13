@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 import { useTaskContext, Task } from "../context/TaskContext";
+import { useRef } from "react";
 
 interface ColumnProps {
   title: string;
@@ -13,6 +14,7 @@ const Column: React.FC<ColumnProps> = ({ title, status }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTask, setNewTask] = useState("");
   const filteredTasks = tasks?.filter((task) => task.status === status) || [];
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ isOver }, drop] = useDrop({
     accept: "TASK",
@@ -56,9 +58,11 @@ const Column: React.FC<ColumnProps> = ({ title, status }) => {
     }
   };
 
+  drop(ref);
+
   return (
     <div
-      ref={drop}
+      ref={ref}
       className={`w-[23rem] h-[80vh] p-3 border-2 flex flex-col ${getBackgroundColor()} ${
         isOver ? "border-blue-300" : "border-blue-500"
       }`}

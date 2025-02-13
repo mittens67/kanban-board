@@ -1,5 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 import { useTaskContext } from "../context/TaskContext";
+import { useRef } from "react";
 
 interface TaskProps {
   id: number;
@@ -11,6 +12,7 @@ interface TaskProps {
 
 const TaskCard: React.FC<TaskProps> = ({ id, task, index, moveTask, fromStatus }) => {
   const { removeTask } = useTaskContext();
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag] = useDrag({
     type: "TASK",
@@ -30,9 +32,11 @@ const TaskCard: React.FC<TaskProps> = ({ id, task, index, moveTask, fromStatus }
     },
   });
 
+  drag(drop(ref));
+
   return (
     <div
-      ref={(node) => drag(drop(node))}
+      ref={ref}
       className={`border-2 bg-white border-blue-300 rounded w-[95%] min-h-[4rem] flex justify-between items-center px-4 cursor-grab transition-all ${
         isDragging ? "opacity-0" : "opacity-100"
       }`}
